@@ -1,9 +1,11 @@
 package pt.isel.mpd.parser;
 
 
+import pt.isel.mpd.exceptions.ParserException;
+import pt.isel.mpd.expressions.*;
 
 public class ParserExpr {
-    /*
+    
     protected final Lex lex;
     protected Lex.Token token;
     
@@ -76,7 +78,5 @@ public class ParserExpr {
             throw new ParserException("End of expression expected!");
         return expr;
     }
-    
-     */
-    
+  
 }
