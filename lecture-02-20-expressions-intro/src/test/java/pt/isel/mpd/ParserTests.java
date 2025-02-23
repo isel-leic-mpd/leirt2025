@@ -26,5 +26,18 @@ public class ParserTests {
         
     }
     
-   
+    @Test
+    public void subExpressionTests() {
+        var parser = new ParserExpr();
+        assertEquals(6, parser.parse("3 - - 3").eval());
+        assertEquals(0, parser.parse("3 +- 3").eval());
+        
+        assertEquals(9, parser.parse("-3 * - 3").eval());
+        assertEquals(-1, parser.parse("3 / -3").eval());
+        assertEquals(12, parser.parse("3.0*(-4.0*(2.0-3.0))").eval());
+        assertEquals(-12, parser.parse("-3.0*(-4.0*(2.0-3.0))").eval());
+        assertEquals(60, parser.parse("-(3.0*(-4.0*(2.0- -3.0)))").eval());
+        
+        assertEquals(-5, parser.parse("-(3+2)").eval());
+    }
 }

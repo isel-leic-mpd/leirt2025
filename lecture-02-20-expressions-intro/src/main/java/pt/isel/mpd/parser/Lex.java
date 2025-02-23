@@ -91,7 +91,6 @@ public class Lex {
             nextChar();
         }
         while(Character.isDigit(curr) || curr == '.');
-        
     }
     
     
@@ -120,9 +119,9 @@ public class Lex {
         ignoreSpaces();
         startPos = pos-1;
         
-        if (Character.isDigit(curr) ||
-                (curr == '-' && (Character.isDigit(line.charAt(pos)))))
+        if (Character.isDigit(curr)) {
             tok = new Token(getNumber());
+        }
         else if(Character.isLetter(curr)) {
             String w = getWord();
             TokType t;

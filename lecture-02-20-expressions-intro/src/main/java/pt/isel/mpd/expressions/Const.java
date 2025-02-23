@@ -16,4 +16,5 @@ public class Const implements Expr {
     public String getFormula() {
         return Double.valueOf(value).toString();
     }
+  
 }

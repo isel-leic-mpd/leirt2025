@@ -5,7 +5,6 @@ import pt.isel.mpd.exceptions.ParserException;
 import pt.isel.mpd.expressions.*;
 
 public class ParserExpr {
-    
     protected final Lex lex;
     protected Lex.Token token;
     
@@ -18,27 +17,43 @@ public class ParserExpr {
         token = lex.next();
     }
     
-    protected Expr factor() throws ParserException {
-        if (token.isNumber())  {
+    protected Expr factor() {
+        boolean negative = false;
+        Expr expr = null;
+        if (token.getType() == Lex.TokType.OP_SUB) {
+            nextToken();
+            negative = true;
+        }
+        if (token.isNumber()) {
             double number = token.getNumber();
             nextToken();
-            return new Const(number);
-        }
-        else if (token.getType() == Lex.TokType.OPEN_BRACKET) {
+            expr = new Const(number);
+        } else if (token.getType() == Lex.TokType.OPEN_BRACKET) {
             nextToken();
-            Expr expr = expression();
-            if (token.getType() == Lex.TokType.CLOSE_BRACKET) {
-                nextToken();
-                return expr;
+            expr = expression();
+            if (token.getType() != Lex.TokType.CLOSE_BRACKET) {
+                throw new ParserException("close parenthesis expected!");
+            }
+            nextToken();
+        }
+        if (expr == null) {
+            throw new ParserException("Number or parentheses expected!");
+        }
+        if (negative) {
+            if (expr instanceof Const e) {
+                expr = new Const(-e.value);
+            } else {
+                expr = new Mul(new Const(-1), expr);
             }
         }
-        throw new ParserException("Number or parentheses expected!");
+        return expr;
+        
     }
     
-    private Expr term( ) throws ParserException {
+    private Expr term( )   {
         Expr expr = factor();
         while ((token.getType() == Lex.TokType.OP_MUL || token.getType() == Lex.TokType.OP_DIV)) {
-           Lex.TokType type =  token.getType();
+            Lex.TokType type =  token.getType();
             nextToken();
             Expr right = factor();
             
@@ -52,25 +67,25 @@ public class ParserExpr {
         return expr;
     }
     
-    public Expr expression() throws ParserException {
+    
+    
+    public Expr expression() {
         Expr expr = term();
         while ((token.getType() == Lex.TokType.OP_ADD ||
                     token.getType() == Lex.TokType.OP_SUB)) {
             Lex.TokType type =  token.getType();
             nextToken();
             Expr right = term();
-            
             if (type == Lex.TokType.OP_ADD) {
                 expr = new Add(expr, right);
             } else {
                 expr = new Sub(expr, right);
             }
-            
         }
         return expr;
     }
     
-    public Expr parse(String line) throws ParserException {
+    public Expr parse(String line)  {
         lex.start(line);
         nextToken();
         Expr expr =  expression();
@@ -78,5 +93,5 @@ public class ParserExpr {
             throw new ParserException("End of expression expected!");
         return expr;
     }
-  
+    
 }

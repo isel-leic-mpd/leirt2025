@@ -1,7 +1,5 @@
 package pt.isel.mpd.expressions;
 
-
-
 public class Add extends BinExpr {
     
     public Add(Expr left, Expr right) {
@@ -17,5 +15,5 @@ public class Add extends BinExpr {
     public double eval() {
         return left.eval() + right.eval();
     }
-  
+    
 }

@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import pt.isel.mpd.exceptions.DivByZeroException;
 import pt.isel.mpd.expressions.*;
 
+
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ExpressionTests {
@@ -27,7 +29,7 @@ public class ExpressionTests {
                      )
                    );
         assertEquals(12, expr.eval());
-        assertEquals("3.0*(-4.0*(2.0-3.0)", expr.getFormula());
+        assertEquals("3.0*(-4.0*(2.0-3.0))", expr.getFormula());
     }
     
     @Test
@@ -51,7 +53,6 @@ public class ExpressionTests {
     
     @Test
     public void divByZeroUsingJunitAssertThrowsTest() {
-        boolean caught = false;
         var expr = new Mul(
             new Const(7),
             new Div(
@@ -61,4 +62,7 @@ public class ExpressionTests {
         );
         assertThrows(DivByZeroException.class, () -> expr.eval());
     }
+    
+    
+ 
 }
