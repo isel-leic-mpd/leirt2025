@@ -14,7 +14,7 @@ public class Lex {
     }
     
     public enum TokType {
-        OP_ADD, OP_SUB, OP_MUL, OP_DIV, OPEN_BRACKET, CLOSE_BRACKET,
+        OP_ADD, OP_MINUS, OP_MUL, OP_DIV, OPEN_BRACKET, CLOSE_BRACKET,
         WORD, NUMBER, KEY_SET, NONE, INVALID, END, RANGE_SEP
     }
     
@@ -136,7 +136,7 @@ public class Lex {
                     tok = new Token(TokType.OP_ADD);
                     break;
                 case '-':
-                    tok = new Token(TokType.OP_SUB);
+                    tok = new Token(TokType.OP_MINUS);
                     break;
                 case '*':
                     tok = new Token(TokType.OP_MUL);

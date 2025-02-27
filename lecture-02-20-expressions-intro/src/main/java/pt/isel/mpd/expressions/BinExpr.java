@@ -8,17 +8,16 @@ public abstract class BinExpr implements Expr {
         this.left = left; this.right = right;
     }
     
-    
     /**
      * Returns the formula of the expression. using
      * the Template Method Pattern, where the getOperator method,
-     * overriden by subclasses, is used to get the operator.
+     * override by subclasses, is used to get the operator.
      * @return
      */
     public final String getFormula() {
-        return left.getFormula() +
+        return "(" + left.getFormula() + ")" +
                    getOperator() +
-               right.getFormula();
+               "(" + right.getFormula() + ")";
     }
     
     public abstract String getOperator();

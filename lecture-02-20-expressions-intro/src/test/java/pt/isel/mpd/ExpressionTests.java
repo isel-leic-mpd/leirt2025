@@ -3,7 +3,7 @@ package pt.isel.mpd;
 import org.junit.jupiter.api.Test;
 import pt.isel.mpd.exceptions.DivByZeroException;
 import pt.isel.mpd.expressions.*;
-
+import pt.isel.mpd.parser.ParserExpr;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,18 +18,24 @@ public class ExpressionTests {
     
     @Test
     public void moreComplexExpression() {
-        var expr = new Mul(
-                     new Const(3),
-                     new Mul(
-                         new Const(-4),
-                         new Sub(
-                             new Const(2),
-                             new Const(3)
-                         )
-                     )
-                   );
-        assertEquals(12, expr.eval());
-        assertEquals("3.0*(-4.0*(2.0-3.0))", expr.getFormula());
+        
+        var parser = new ParserExpr();
+        
+        var expr = parser.parse("3.0*(-4.0*(2.0-3.0))");
+        var memo = new Memo(expr, "3.0*(-4.0*(2.0-3.0))");
+        
+//        var expr = new Mul(
+//                     new Const(3),
+//                     new Mul(
+//                         new Const(-4),
+//                         new Sub(
+//                             new Const(2),
+//                             new Const(3)
+//                         )
+//                     )
+//                   );
+        assertEquals(12, memo.eval());
+        assertEquals("3.0*(-4.0*(2.0-3.0))", memo.getFormula());
     }
     
     @Test

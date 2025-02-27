@@ -20,7 +20,7 @@ public class ParserExpr {
     protected Expr factor() {
         boolean negative = false;
         Expr expr = null;
-        if (token.getType() == Lex.TokType.OP_SUB) {
+        if (token.getType() == Lex.TokType.OP_MINUS) {
             nextToken();
             negative = true;
         }
@@ -47,7 +47,6 @@ public class ParserExpr {
             }
         }
         return expr;
-        
     }
     
     private Expr term( )   {
@@ -72,7 +71,7 @@ public class ParserExpr {
     public Expr expression() {
         Expr expr = term();
         while ((token.getType() == Lex.TokType.OP_ADD ||
-                    token.getType() == Lex.TokType.OP_SUB)) {
+                    token.getType() == Lex.TokType.OP_MINUS)) {
             Lex.TokType type =  token.getType();
             nextToken();
             Expr right = term();

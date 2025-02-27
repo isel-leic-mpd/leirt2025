@@ -9,6 +9,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/lecture-02-20-expressions-intro" />
+            <option value="$PROJECT_DIR$/lecture-02-26-27-more-about-design-patterns" />
+            <option value="$PROJECT_DIR$/spreadsheet0" />
           </set>
         </option>
       </GradleProjectSettings>
