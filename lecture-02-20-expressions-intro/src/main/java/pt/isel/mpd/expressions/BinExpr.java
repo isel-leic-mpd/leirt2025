@@ -15,9 +15,14 @@ public abstract class BinExpr implements Expr {
      * @return
      */
     public final String getFormula() {
-        return "(" + left.getFormula() + ")" +
+        // parenthesis could be added but in this way we have
+        // lots of stupid parenthesis thar aren't needed
+        //        return "(" + left.getFormula() + ")" +
+        //                   getOperator() +
+        //               "(" + right.getFormula() + ")";
+        return left.getFormula() +
                    getOperator() +
-               "(" + right.getFormula() + ")";
+               right.getFormula();
     }
     
     public abstract String getOperator();

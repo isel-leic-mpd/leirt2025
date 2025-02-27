@@ -1,5 +1,7 @@
 package pt.isel.mpd.products;
 
+import pt.isel.mpd.products.visitors.ElectronicsVisitor;
+
 public class Promo extends BaseElectronics {
     private Electronics original;
 	private int discount;
@@ -26,5 +28,8 @@ public class Promo extends BaseElectronics {
 	public Electronics getOriginal() {
 		return original;
 	}
-	
+	@Override
+	public void accept(ElectronicsVisitor visitor) {
+		visitor.visit(this);
+	}
 }

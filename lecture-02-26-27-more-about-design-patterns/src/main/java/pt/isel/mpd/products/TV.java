@@ -1,5 +1,7 @@
 package pt.isel.mpd.products;
 
+import pt.isel.mpd.products.visitors.ElectronicsVisitor;
+
 public class TV extends BaseElectronics {
     private final Resolution res;    // in pixels
     private final double screenSize; // in inches
@@ -13,6 +15,11 @@ public class TV extends BaseElectronics {
     @Override
     public Category getCategory() {
         return Category.VIDEO;
+    }
+    
+    @Override
+    public void accept(ElectronicsVisitor visitor) {
+        visitor.visit(this);
     }
     
     public Resolution getResolution() {

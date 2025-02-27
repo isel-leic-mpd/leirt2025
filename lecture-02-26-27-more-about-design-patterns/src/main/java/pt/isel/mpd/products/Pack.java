@@ -1,5 +1,7 @@
 package pt.isel.mpd.products;
 
+import pt.isel.mpd.products.visitors.ElectronicsVisitor;
+
 import java.util.*;
 
 public class Pack extends BaseElectronics implements Iterable<Electronics> {
@@ -28,5 +30,8 @@ public class Pack extends BaseElectronics implements Iterable<Electronics> {
 	public Iterator<Electronics> iterator() {
 		return products.iterator();
 	}
-
+	@Override
+	public void accept(ElectronicsVisitor visitor) {
+		visitor.visit(this);
+	}
 }

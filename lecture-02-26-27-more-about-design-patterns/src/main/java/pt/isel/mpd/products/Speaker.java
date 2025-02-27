@@ -1,5 +1,7 @@
 package pt.isel.mpd.products;
 
+import pt.isel.mpd.products.visitors.ElectronicsVisitor;
+
 public class Speaker extends BaseElectronics {
     private final double power; // in Watts
 
@@ -15,6 +17,11 @@ public class Speaker extends BaseElectronics {
 
     public double getPower() {
         return power;
+    }
+    
+    @Override
+    public void accept(ElectronicsVisitor visitor) {
+        visitor.visit(this);
     }
 
 }
