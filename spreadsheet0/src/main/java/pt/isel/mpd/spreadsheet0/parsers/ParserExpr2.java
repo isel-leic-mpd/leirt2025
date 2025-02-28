@@ -22,7 +22,7 @@ public class ParserExpr2 extends ParserExpr {
     }
     
     
-    protected Expr factor() throws ParserException {
+    protected Expr factor()  {
         if (token.isWord()) {
             String name = token.getWord();
             nextToken();

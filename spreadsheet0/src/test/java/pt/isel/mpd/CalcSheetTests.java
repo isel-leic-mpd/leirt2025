@@ -43,6 +43,23 @@ public class CalcSheetTests {
        
     }
     
+    @Test
+    void checkIfACell_A_ThatDependsOn_aCell_B_isReevaluatedIf_B_change() {
+        int rows = 10; int cols = 20;
+        var sheet = new CalcSheet(rows,cols);
+        var parser = new ParserExpr2(sheet);
+        var a1 = parser.parse("B1+2");
+        var b1 = new Const(3);
+        
+        sheet.setCellAt(0,0, a1);
+        sheet.setCellAt(0, 1, b1);
+        assertEquals(3, sheet.getExprAt(0,1).eval());
+        assertEquals(5, sheet.getExprAt(0,0).eval());
+        
+        sheet.setCellAt(0, 1, new Const(6));
+        assertEquals(8, sheet.getExprAt(0,0).eval());
+    }
+    
   
     
     

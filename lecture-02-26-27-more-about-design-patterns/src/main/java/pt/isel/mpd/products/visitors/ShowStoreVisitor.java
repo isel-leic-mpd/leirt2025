@@ -33,7 +33,6 @@ public class ShowStoreVisitor implements ElectronicsVisitor {
         incLevel();
         for(var e : pack) {
             e.accept(this);
-          
         }
         decLevel();
     }
@@ -60,7 +59,5 @@ public class ShowStoreVisitor implements ElectronicsVisitor {
         incLevel();
         promo.getOriginal().accept(this);
         decLevel();
-        
-        
     }
 }
