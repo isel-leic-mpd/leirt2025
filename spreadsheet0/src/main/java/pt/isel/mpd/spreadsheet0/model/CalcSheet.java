@@ -33,18 +33,9 @@ public class CalcSheet {
         return new CellCoords(row,col);
     }
     
-    
-    private void buildCells() {
-        for(int row = 0; row < rows; row++) {
-            for(int col = 0; col < cols; col++) {
-                cells[row][col] = new Cell(this, row,col);
-            }
-        }
-    }
     public CalcSheet(int rows, int cols) {
         this.cells = new Cell[rows][cols];
         this.rows = rows; this.cols = cols;
-        buildCells();
     }
     
     public Cell getCellAt(int row, int col) {
