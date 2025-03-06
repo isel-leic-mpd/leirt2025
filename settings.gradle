@@ -9,4 +9,5 @@ rootProject.name = 'leirt2025'
 include 'lecture-02-20-expressions-intro'
 include 'lecture-02-26-27-more-about-design-patterns'
 include 'spreadsheet0'
+include 'lecture-03-05-publisher-subscriber-and-more'
 

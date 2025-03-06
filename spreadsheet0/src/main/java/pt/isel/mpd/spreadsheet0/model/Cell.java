@@ -2,7 +2,7 @@ package pt.isel.mpd.spreadsheet0.model;
 
 import pt.isel.mpd.expressions.Const;
 import pt.isel.mpd.expressions.Expr;
- 
+
 public class Cell {
     public final CalcSheet sheet;
     public final int col, row;
