@@ -10,4 +10,5 @@ include 'lecture-02-20-expressions-intro'
 include 'lecture-02-26-27-more-about-design-patterns'
 include 'spreadsheet0'
 include 'lecture-03-05-publisher-subscriber-and-more'
+include 'lecture-03-19-json-deserialization-reflection-intro'
 
