@@ -1,0 +1,62 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+skinparam nodesep 20
+skinparam ranksep 20
+skinparam classAttributeIconSize 0
+hide empty members
+skinparam style strictuml
+'hide circle
+
+'interfaces and classes
+
+interface Expr {
+    eval() : double
+    getFormula() : String
+}
+
+class BinExpr {
+    getFormula() : String
+}
+
+class Memo {
+    eval() : double
+    getFormula() : String
+}
+
+class Add {
+    eval(): double
+}
+
+class Sub {
+    eval() : double
+}
+class Mul {
+    eval() : double
+}
+
+class Div {
+    eval() : double
+}
+
+class Const {
+    eval() : double
+    getFormula() : String
+}
+
+'implementation relations
+Expr <|.... BinExpr
+Expr <|.... Const
+Expr <|.... Memo
+
+'inheritance relations
+BinExpr <|-- Add
+BinExpr <|-- Sub
+BinExpr <|-- Mul
+BinExpr <|-- Div
+
+'composition relations
+BinExpr "1" o-- "1" Expr : left
+BinExpr "1" o-- "1" Expr : right
+Memo    "1" o-- "1" Expr : expr
+@enduml
