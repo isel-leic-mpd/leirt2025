@@ -9,6 +9,16 @@ repositories {
     mavenCentral()
 }
 
+
+tasks.withType(JavaExec).configureEach {
+    jvmArgs += ["--add-opens", "java.base/java.time=ALL-UNNAMED"]
+}
+
+tasks.withType(Test).configureEach {
+    jvmArgs += ["--add-opens", "java.base/java.time=ALL-UNNAMED"]
+}
+
+
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'

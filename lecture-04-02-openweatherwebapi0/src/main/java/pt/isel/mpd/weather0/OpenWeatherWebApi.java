@@ -132,7 +132,7 @@ public class OpenWeatherWebApi {
         
         ForecastInfoDto finfo =
                 gson.fromJson(httpGet(path), ForecastInfoDto.class);
-               
+        System.out.println(finfo.getLocal());
         return finfo.getForecast();
     }
 

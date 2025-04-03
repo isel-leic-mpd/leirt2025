@@ -73,60 +73,6 @@ public class ReflectionTests {
         System.out.println(cls.getName());
     }
     
-   
-    @Test
-    public void saveExpressionToJsonTest() {
-        var parser = new ParserExpr();
-        Expr add = parser.parse("2+3");
-        var json = saveObject(add);
-        System.out.println(json.toString(2));
-        
-    }
-    
-    @Test
-    public void saveExpressionsListToJsonTest() {
-        var parser = new ParserExpr();
-        var list = new ArrayList<Expr>();
-        list.add(new Const(2));
-        list.add(parser.parse("2+3"));
-        list.add(parser.parse("2*(3+4)"));
-        
-        var json = saveObject(list);
-        System.out.println(json.toString(2));
-        
-    }
-    
-    @Test
-    public void saveAndLoadExpressionsListToJson2Test()  {
-        var list = new ArrayList<>(List.of(
-            new Const(2),
-            new Const(3),
-            new Const(4)
-        ));
-        var json = saveCollection(list, Expr.class);
-        System.out.println(json.toString(2));
-        try {
-            Collection<Expr> list2 = loadCollection(Expr.class, json);
-            System.out.println(list2);
-        }
-        catch(Exception e )  {
-            System.out.println("exception " + e + "!");
-        }
-    }
-    
-    @Test
-    public void saveExpressionsArrayToJson2Test() {
-        var exprContainer = new Expr[] {
-            new Const(2),
-            new Const(3),
-            new Const(4)
-        };
-        
-        var json = saveObject(exprContainer);
-        System.out.println(json.toString(2));
-        
-    }
-    
     @Test
     @SuppressWarnings("unchecked")
     public void useNonGenericCollectionAndCastTest() {

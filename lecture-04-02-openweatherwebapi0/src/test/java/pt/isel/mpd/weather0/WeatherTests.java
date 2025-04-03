@@ -2,15 +2,14 @@ package pt.isel.mpd.weather0;
 
 import org.junit.jupiter.api.Test;
 import pt.isel.mpd.weather0.dto.*;
-import pt.isel.mpd.weather0.queries.Queries;
+import static pt.isel.mpd.weather0.queries.Queries.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -123,9 +122,10 @@ public class WeatherTests {
         
         var forecast =
             weatherApi.forecastWeatherAt(LISBON_LAT, LISBON_LONG);
-        System.out.println(forecast);
-        var res =
-            getSunnyPeriodsForForecast(forecast);
+        
+        var res = filter(forecast,
+                wf -> wf.description().contains("sun"));
+            
         
         System.out.println(res);
     }
@@ -137,8 +137,8 @@ public class WeatherTests {
         var forecast =
             weatherApi.forecastWeatherAt(LISBON_LAT, LISBON_LONG);
         
-        var res =
-            getRainyPeriodsForForecast(forecast);
+        var res = filter(forecast,
+            wf -> wf.description().contains("rain"));
         
         System.out.println(res);
     }
@@ -192,6 +192,22 @@ public class WeatherTests {
     }
     
     @Test
+    public void get_max_temp_for_rainy_periods_in_lisbon_forecast_using_chaining() {
+        var weatherApi = new OpenWeatherWebApi();
+        
+        var maxTempInRainyPeriod =
+            max(
+                filter(
+                    weatherApi.forecastWeatherAt(LISBON_LAT, LISBON_LONG),
+                    p -> p.description().contains("rain")
+                ),
+                Comparator.comparingDouble(WeatherInfoForecastDto::maxTemp)
+            );
+           
+        System.out.println(maxTempInRainyPeriod);
+    }
+    
+    @Test
     public void get_max_temp_for_rainy_periods_in_lisbon_forecast_using_streams() {
         var weatherApi = new OpenWeatherWebApi();
         
@@ -205,7 +221,7 @@ public class WeatherTests {
     record DatedValue<T>  (LocalDateTime dateTime, T value) {}
     
     @Test
-    public void getMaxTemperatureInLisbonForecast() {
+    public void getMaxTemperatureInLisbonForecastUsingStreams() {
         var weatherApi = new OpenWeatherWebApi();
         
         var forecast =
