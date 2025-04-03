@@ -8,6 +8,7 @@ import pt.isel.mpd.reflection2.exceptions.SerializationException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Collection;
+import pt.isel.mpd.reflection2.annotations.Transient;
 
 import static pt.isel.mpd.reflection2.ReflectionUtils.*;
 
@@ -88,7 +89,7 @@ public class SerializationUtils {
         var fields = getAllFields(obj);
         for (var field : fields) {
             if (isStatic(field)) continue;
-            
+            if (field.getAnnotation(Transient.class) != null) continue;
             field.setAccessible(true);
             try {
                 var value = field.get(obj);
@@ -210,6 +211,7 @@ public class SerializationUtils {
                 for (var field : fields) {
                     if (isStatic(field))
                         continue;
+                    if (field.getAnnotation(Transient.class) != null) continue;
                     String jsonName = field.getName();
                     field.setAccessible(true);
                     var fieldType = field.getType();

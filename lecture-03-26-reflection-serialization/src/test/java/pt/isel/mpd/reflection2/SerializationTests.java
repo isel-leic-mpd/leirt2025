@@ -1,6 +1,8 @@
 package pt.isel.mpd.reflection2;
 
 import org.junit.jupiter.api.Test;
+import pt.isel.mpd.reflection2.annotations.SerializedName;
+import pt.isel.mpd.reflection2.annotations.Transient;
 import pt.isel.mpd.reflection2.expressions.Const;
 import pt.isel.mpd.reflection2.expressions.Expr;
 import pt.isel.mpd.reflection2.expressions.parser.ParserExpr;
@@ -71,8 +73,12 @@ public class SerializationTests {
         }
     }
     
+ 
     static class Person {
+        @SerializedName("@Birthday")
         private String birthday;
+        
+        @Transient
         private int age;
         
         private Person() {
@@ -80,6 +86,7 @@ public class SerializationTests {
         
         Person(String birthday) {
             this.birthday = birthday;
+            age =10;
         }
         
         int getAge() {
