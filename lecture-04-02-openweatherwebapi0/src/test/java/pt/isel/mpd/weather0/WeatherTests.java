@@ -145,37 +145,6 @@ public class WeatherTests {
     
     
     @Test
-    public void get_bad_co_for_lisbon_pollution_data_at_march_2024_test() {
-        var weatherApi = new OpenWeatherWebApi();
-        
-        var pollutionData =
-            weatherApi.pollutionHistoryAt(LISBON_LAT, LISBON_LONG,
-                LocalDate.of(2024, 03, 01),
-                LocalDate.of(2024,03, 25 ));
-        
-        var res =
-            getTooMuchCOForPollutionData(pollutionData);
-        
-        System.out.println(res);
-    }
-    
-    
-    @Test
-    public void get_good_co_for_lisbon_pollution_data_at_march_2024_test() {
-        var weatherApi = new OpenWeatherWebApi();
-        
-        var pollutionData =
-            weatherApi.pollutionHistoryAt(LISBON_LAT, LISBON_LONG,
-                LocalDate.of(2024, 03, 01),
-                LocalDate.of(2024,03, 25 ));
-        
-        var res =
-            getGoodCOForPollutionData(pollutionData);
-        
-        System.out.println(res);
-    }
-    
-    @Test
     public void get_max_temp_for_rainy_periods_in_lisbon_forecast_imperative() {
         var weatherApi = new OpenWeatherWebApi();
         WeatherInfoForecastDto maxTempInRainyPeriod = null;
@@ -221,14 +190,16 @@ public class WeatherTests {
     record DatedValue<T>  (LocalDateTime dateTime, T value) {}
     
     @Test
-    public void getMaxTemperatureInLisbonForecastUsingStreams() {
+    public void getForecastTemperatureSamplesAtLisbonCoordinatesUsingStreams() {
         var weatherApi = new OpenWeatherWebApi();
         
-        var forecast =
+        var forecastTemps =
             weatherApi.forecastWeatherAt(LISBON_LAT, LISBON_LONG).stream()
-            .map( wf -> new DatedValue<>(wf.dateTime(), wf.maxTemp()))
-            .max(Comparator.comparingDouble(DatedValue::value));
-        System.out.println(forecast.get());
+            .map(wf -> new DatedValue<>(wf.dateTime(), wf.temp()))
+            .toList();
+        for (var t : forecastTemps) {
+            System.out.println(t);
+        }
     }
     
     @Test
@@ -258,23 +229,6 @@ public class WeatherTests {
         assertEquals(NDAYS*SAMPLES_PER_DAY, winfo.size());
     }
     
-    @Test
-    public void getForecastWeatherForLisbonTestUsingStreams() {
-        int NDAYS = 5;
-        int SAMPLES_PER_DAY = 8;
-        
-        OpenWeatherWebApi webApi = new OpenWeatherWebApi();
-        var forecasts = webApi.search("Lisbon").stream()
-            .filter(loc -> loc.getCountry().equals("PT"))
-            .flatMap(loc-> webApi.forecastWeatherAt(loc.getLat(), loc.getLon()).stream())
-            .toList();
-          
-        for(var wif : forecasts) {
-            System.out.println(wif);
-        }
-        
-        assertTrue(forecasts.size() == NDAYS*SAMPLES_PER_DAY);
-        
-    }
+    
     
 }
