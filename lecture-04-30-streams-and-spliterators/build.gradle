@@ -1,0 +1,21 @@
+plugins {
+    id 'java'
+}
+
+group = 'pt.isel.mpd'
+version = 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation ("com.google.code.gson:gson:2.8.6")
+    implementation(implementation project(':lecture-04-16-weather-service-and-pipe-cache'))
+}
+
+test {
+    useJUnitPlatform()
+}

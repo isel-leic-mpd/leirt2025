@@ -1,8 +1,6 @@
 package pt.isel.mpd.weather2.requests;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
@@ -19,7 +17,10 @@ public class HttpRequest implements Request {
                                  .send(request, HttpResponse.BodyHandlers.ofInputStream())
                                  .body();
             return new InputStreamReader(input);
-        } catch (Exception e) {
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+        catch(InterruptedException e) {
             throw new RuntimeException(e);
         }
     }

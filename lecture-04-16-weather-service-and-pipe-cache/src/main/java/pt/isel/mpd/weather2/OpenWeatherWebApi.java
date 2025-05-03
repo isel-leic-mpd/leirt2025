@@ -7,11 +7,7 @@ import pt.isel.mpd.weather2.requests.Request;
 import pt.isel.mpd.weather2.utils.TimeUtils;
 
 import java.io.*;
-import java.net.URI;
 import java.net.URL;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
@@ -86,8 +82,14 @@ public class OpenWeatherWebApi {
     public WeatherInfoDto weatherAt(double lat, double lon) {
         String path =  WEATHER_SERVICE +
             String.format(WEATHER_AT_TEMPLATE, lat, lon, API_KEY);
-        var reader = request.get(path);
-        return gson.fromJson(reader, WeatherInfoDto.class);
+        
+        try (Reader reader = request.get(path)) {
+            return gson.fromJson(reader, WeatherInfoDto.class);
+        }
+        catch(IOException e) {
+            throw new UncheckedIOException(e);
+        }
+      
     }
 
     /**

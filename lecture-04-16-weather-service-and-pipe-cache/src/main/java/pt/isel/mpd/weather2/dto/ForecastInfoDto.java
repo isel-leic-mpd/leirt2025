@@ -2,6 +2,7 @@ package pt.isel.mpd.weather2.dto;
 
 import com.google.gson.annotations.SerializedName;
 
+
 import java.util.List;
 
 public class ForecastInfoDto {

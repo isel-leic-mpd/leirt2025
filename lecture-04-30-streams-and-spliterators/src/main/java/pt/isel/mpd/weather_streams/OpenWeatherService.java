@@ -5,10 +5,8 @@ import pt.isel.mpd.weather2.dto.LocationDto;
 import pt.isel.mpd.weather2.dto.WeatherInfoForecastDto;
 import pt.isel.mpd.weather_streams.model.*;
 
-import java.time.LocalDate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
-
-import static pt.isel.mpd.weather2.queries.PipeIterable.from;
 
 public class OpenWeatherService {
 	private OpenWeatherWebApi api;
@@ -25,7 +23,9 @@ public class OpenWeatherService {
 	 */
 	public Stream<Location> search(String placeName) {
 		// CHANGE TO TURN LAZY
-		return api.search(placeName).stream().map(this::dtoToLocation);
+		return  Stream.of(1)
+				.flatMap(__ -> api.search(placeName).stream())
+			   .map(this::dtoToLocation);
 	}
 
 	

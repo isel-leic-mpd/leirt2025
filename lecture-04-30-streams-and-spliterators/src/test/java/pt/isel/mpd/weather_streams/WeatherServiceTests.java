@@ -1,11 +1,13 @@
 package pt.isel.mpd.weather_streams;
 
 import org.junit.jupiter.api.Test;
-
 import pt.isel.mpd.weather2.OpenWeatherWebApi;
 import pt.isel.mpd.weather_streams.model.*;
-import pt.isel.mpd.weather2.requests.*;
+import pt.isel.mpd.weather2.requests.CounterRequest;
+import pt.isel.mpd.weather2.requests.HttpRequest;
+
 import java.time.LocalDate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

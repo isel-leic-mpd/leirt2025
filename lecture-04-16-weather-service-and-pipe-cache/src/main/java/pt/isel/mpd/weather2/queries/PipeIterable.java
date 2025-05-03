@@ -9,6 +9,8 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
+import static pt.isel.mpd.weather2.utils.Errors.TODO;
+
 public interface PipeIterable<T> extends Iterable<T> {
     // Construction Operations
     static <T> PipeIterable<T> from(Iterable<T> src) {
@@ -23,6 +25,7 @@ public interface PipeIterable<T> extends Iterable<T> {
     }
     
     static <T> PipeIterable<T> generate(Supplier<T> s) {
+        TODO("generate");
         return null;
     }
     
@@ -64,15 +67,18 @@ public interface PipeIterable<T> extends Iterable<T> {
     }
     
     default PipeIterable<T> distinct() {
+        TODO("distinct");
         return null;
     }
 
     default PipeIterable<T>  cache() {
+        TODO("cache");
         return null;
     }
     
     default PipeIterable<T> limit(int n) {
-       return null;
+        TODO("limit");
+        return null;
     }
     
     // Terminal Operations

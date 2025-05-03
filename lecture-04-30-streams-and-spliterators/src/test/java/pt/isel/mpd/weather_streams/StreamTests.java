@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -43,23 +42,26 @@ public class StreamTests {
     public void getPrimesTill_10_000_000() {
         
         var primes =
-            LongStream.range(2, 10_000_000)
+            LongStream.range(2, 1_000_000)
+                .mapToObj(l -> l)
                 .filter(PrimeUtils::isPrime);
         
         long startTime = System.currentTimeMillis();
         
-        var primesArray = primes.
+        var primesArray =
             // the parallel operation speedup the
             // stream consume by using all cores
             // in the process
+            primes
+            .parallel().
             toArray();
         
         System.out.println("done in " + (System.currentTimeMillis()-startTime) + "ms!");
         
         System.out.println("number of primes till 10_000_000: " + primesArray.length);
-//        for(var p : primesArray) {
-//            System.out.println(p);
-//        }
+        for(var p : primesArray) {
+            System.out.println(p);
+        }
       
     }
     

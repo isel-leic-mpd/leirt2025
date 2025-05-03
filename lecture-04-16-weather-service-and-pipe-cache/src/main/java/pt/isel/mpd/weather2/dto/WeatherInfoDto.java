@@ -1,6 +1,6 @@
 package pt.isel.mpd.weather2.dto;
 
-import static pt.isel.mpd.weather2.utils.PrintUtils.*;
+import static pt.isel.mpd.weather2.utils.PrintUtils.EOL;
 
 public class WeatherInfoDto extends WeatherInfoBaseDto {
 

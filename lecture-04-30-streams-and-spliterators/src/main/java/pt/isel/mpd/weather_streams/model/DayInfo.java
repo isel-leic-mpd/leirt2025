@@ -3,7 +3,6 @@ package pt.isel.mpd.weather_streams.model;
 import pt.isel.mpd.weather2.queries.PipeIterable;
 
 import java.time.LocalDate;
-import java.util.Comparator;
 import java.util.function.Function;
 import java.util.stream.Stream;
 

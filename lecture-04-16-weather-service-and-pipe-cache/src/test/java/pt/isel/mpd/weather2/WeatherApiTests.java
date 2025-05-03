@@ -11,7 +11,6 @@ import pt.isel.mpd.weather2.requests.SaverRequest;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
