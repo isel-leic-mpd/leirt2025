@@ -17,6 +17,5 @@ include 'lecture-03-26-reflection-serialization'
 include 'lecture-04-02-openweatherwebapi0'
 include 'lecture-04-09-10-chain-and-lazy-queries'
 include 'lecture-04-16-weather-service-and-pipe-cache'
-
-
 include 'lecture-04-30-streams-and-spliterators'
+include 'lecture-05-07-build-spliterators'
