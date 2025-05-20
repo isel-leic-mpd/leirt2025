@@ -49,4 +49,48 @@ public class CacheTests {
         assertEquals(randoms1, randoms2);
         
     }
+    
+    @Test
+    public void cacheFromRandomGeneratedSequenceSameSeed() {
+        
+        var random0 = new Random(5);
+        var randomNumbers0 = PipeIterable.generate(()->random0.nextLong(1000));
+        var randoms0 = randomNumbers0.limit(10).toList();
+        
+        var random = new Random(5);
+        var randomNumbers = PipeIterable.generate(()->random.nextLong(1000));
+        
+        var randomCache = randomNumbers.cache();
+        
+        var randoms1 = randomCache.limit(10).toList();
+        var randoms2 = randomCache.limit(10).toList();
+        
+        
+        assertEquals(randoms1, randoms2);
+        assertEquals(randoms0, randoms1);
+        
+    }
+    
+    @Test
+    public void cacheFromRandomGeneratedSequenceSameSeed2() {
+        
+        var random0 = new Random(5);
+        var randomNumbers0 = PipeIterable.generate(()->random0.nextLong(1000));
+        var randoms0 = randomNumbers0.limit(10).toList();
+        
+        var random = new Random(5);
+        var randomNumbers = PipeIterable.generate(()->random.nextLong(1000));
+        
+        var randomCache = randomNumbers.cache();
+        
+        var randoms1 = randomCache.iterator();
+        var randoms2 = randomCache.iterator();
+        
+
+        
+        
+        assertEquals(randoms1, randoms2);
+        assertEquals(randoms0, randoms1);
+        
+    }
 }
