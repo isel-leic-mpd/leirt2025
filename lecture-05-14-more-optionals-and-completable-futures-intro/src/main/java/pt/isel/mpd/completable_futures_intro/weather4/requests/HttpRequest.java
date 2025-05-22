@@ -1,22 +1,26 @@
 package pt.isel.mpd.completable_futures_intro.weather4.requests;
 
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UncheckedIOException;
-import java.net.URL;
+import java.io.*;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpResponse;
 
 public class HttpRequest implements  Request {
 
 	@Override
-	@SuppressWarnings("deprecation")
-	public Reader get(String path) {
+	public Reader get(String path)  {
+		HttpClient client = HttpClient.newHttpClient();
+		var request = java.net.http.HttpRequest.newBuilder()
+			.uri(URI.create(path))
+			.GET()
+			.build();
 		try {
-			URL url = new URL(path);
-			return new InputStreamReader(url.openStream());
-		}
-		catch(IOException e) {
-			throw new UncheckedIOException(e);
+			InputStream input =  client
+				.send(request, HttpResponse.BodyHandlers.ofInputStream())
+				.body();
+			return new InputStreamReader(input);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
 		}
 	}
 }

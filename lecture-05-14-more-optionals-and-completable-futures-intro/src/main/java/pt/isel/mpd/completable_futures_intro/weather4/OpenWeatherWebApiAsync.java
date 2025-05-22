@@ -5,11 +5,10 @@ import com.google.gson.Gson;
 import pt.isel.mpd.completable_futures_intro.weather4.dto.WeatherInfoDto;
 import pt.isel.mpd.completable_futures_intro.weather4.requests.AsyncRequest;
 import pt.isel.mpd.completable_futures_intro.weather4.requests.HttpAsyncRequest;
+import pt.isel.mpd.completable_futures_intro.weather4.requests.HttpRequest;
+import pt.isel.mpd.completable_futures_intro.weather4.requests.Request;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.net.URL;
 import java.util.concurrent.CompletableFuture;
 
@@ -29,7 +28,6 @@ class OpenWeatherWebApiAsync {
                      new BufferedReader(new InputStreamReader(keyFile.openStream()))) {
                 return reader.readLine();
             }
-            
         }
         catch(IOException e) {
             throw new IllegalStateException(
@@ -78,32 +76,31 @@ class OpenWeatherWebApiAsync {
             + API_KEY;
     
     protected final Gson gson;
-    private final AsyncRequest req;
+    private final Request req;
     
     
     
     // API METHODS
     
-    /**
-     * Get WeatherInfo's from a local coordinates given a date interval
-     * @param lat
-     * @param lon
-     * @return
-     */
-    public CompletableFuture<WeatherInfoDto> weatherAt(double lat, double lon) {
-        var path =  String.format(WEATHER_AT_TEMPLATE, lat, lon);
-        
-        return req.get(path)
-              .thenApply(reader -> {
-                  try(reader) {
-                      return gson.fromJson(reader, WeatherInfoDto.class);
-                  }
-                  catch(IOException e) {
-                      throw new UncheckedIOException(e);
-                  }
-              });
-    }
-    
+//    /**
+//     * Get WeatherInfo's from a local coordinates given a date interval
+//     * @param lat
+//     * @param lon
+//     * @return
+//     */
+//    public WeatherInfoDto weatherAt(double lat, double lon) {
+//        var path =  String.format(WEATHER_AT_TEMPLATE, lat, lon);
+//
+//        try (Reader reader = req.get(path)) {
+//            WeatherInfoDto winfo =
+//                gson.fromJson(reader, WeatherInfoDto.class);
+//            return winfo;
+//        }
+//        catch(IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+//    }
+//
     
     
 //    /**
@@ -184,13 +181,13 @@ class OpenWeatherWebApiAsync {
 //        }
 //    }
 //
-    public OpenWeatherWebApiAsync(AsyncRequest req) {
+    public OpenWeatherWebApiAsync(Request req) {
         this.req = req;
         gson = new Gson();
     }
     
     public OpenWeatherWebApiAsync() {
-        this(new HttpAsyncRequest());
+        this(new HttpRequest());
     }
     
    

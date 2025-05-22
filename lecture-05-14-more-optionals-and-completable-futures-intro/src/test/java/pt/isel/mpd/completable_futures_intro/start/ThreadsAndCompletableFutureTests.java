@@ -8,11 +8,11 @@ import pt.isel.mpd.completable_futures_intro.weather4.OpenWeatherWebApi;
 import pt.isel.mpd.completable_futures_intro.weather4.dto.WeatherInfoDto;
 import pt.isel.mpd.completable_futures_intro.weather4.requests.HttpRequest;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static pt.isel.mpd.completable_futures_intro.utils.ThreadUtils.join;
@@ -120,7 +120,6 @@ public class ThreadsAndCompletableFutureTests {
     }
     
     @Test
-    @SuppressWarnings("unchecked")
     public void combineTwoCompletableFutures() {
         // launch a completable future...
         CompletableFuture<Integer> f1 =  inc(3);
@@ -158,29 +157,32 @@ public class ThreadsAndCompletableFutureTests {
     }
     
     /**
+     * Produce a new list the results from aplying "inc" operation to all
+     * integers in values
+     *
      * Running the incAll0Test, explain the different behaviours between the uncommented
      * and the comment versions of the code below
      * @param values
      */
     private void incAll0(List<Integer> values) {
         
-//        var s = values.stream()
-//            .map( i -> inc(i));
-//
-//        logger.info("stream produced");
-//        sleep(8000);
-//
-//        logger.info("start foreach");
-//        s.forEach(f -> System.out.println(f.join()));
-//        logger.info("end foreach");
-        
-        logger.info("stream produce");
-        var l = values.stream()
-                     .map( i -> inc(i))
-                    .toList();
+        var s = values.stream()
+            .map( i -> inc(i));
+
+        logger.info("stream produced");
+        sleep(8000);
         logger.info("start foreach");
-       l.forEach(f -> System.out.println(f.join()));
+        s.forEach(f -> System.out.println(f.join()));
         logger.info("end foreach");
+ 
+        
+//        logger.info("stream produce");
+//        var l = values.stream()
+//                     .map( i -> inc(i))
+//                    .toList();
+//        logger.info("start foreach");
+//        l.forEach(f -> System.out.println(f.join()));
+//        logger.info("end foreach");
     }
     
     @SuppressWarnings("unchecked")
@@ -194,10 +196,29 @@ public class ThreadsAndCompletableFutureTests {
              
     }
     
-    private CompletableFuture<Integer> incAndAddAll(List<Integer> values) {
+    private CompletableFuture<Integer> incAndAddAll0(List<Integer> values) {
          // sum of increments
-        return null;
+        CompletableFuture<Integer>[] futures =
+            values.stream()
+                .map(i -> inc(i))
+                .toArray(size-> new CompletableFuture[size]);
+        return  CompletableFuture.allOf(futures)
+        .thenApply(__ -> Arrays.stream(futures)
+                         .map(f -> f.join())
+                         .reduce(0, (i1, i2) -> i1 + i2) );
     }
+    
+    private CompletableFuture<Integer> incAndAddAll(List<Integer> values) {
+        // sum of increments
+        CompletableFuture<Integer> initial = CompletableFuture.completedFuture(0);
+        return
+            values.stream()
+            .map(i -> inc(i))
+            .reduce(initial, (f1, f2) -> f1.thenCombine(f2, (i1, i2) -> i1 + i2));
+    }
+    
+    
+    // testes
     
     @Test
     public void incAll0Test() {

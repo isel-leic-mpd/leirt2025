@@ -3,8 +3,8 @@ package pt.isel.mpd.completable_futures_intro.weather4;
 import com.google.gson.Gson;
 import pt.isel.mpd.completable_futures_intro.weather4.dto.*;
 import pt.isel.mpd.completable_futures_intro.weather4.exceptions.WeatherApiException;
-import pt.isel.mpd.completable_futures_intro.weather4.requests.HttpRequest;
-import pt.isel.mpd.completable_futures_intro.weather4.requests.Request;
+import pt.isel.mpd.completable_futures_intro.weather4.requests.AsyncRequest;
+import pt.isel.mpd.completable_futures_intro.weather4.requests.HttpAsyncRequest;
 import pt.isel.mpd.completable_futures_intro.utils.TimeUtils;
 
 
@@ -13,6 +13,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 
 public class OpenWeatherWebApi {
@@ -78,7 +79,7 @@ public class OpenWeatherWebApi {
         + API_KEY;
 
     protected final Gson gson;
-    private final Request req;
+    private final AsyncRequest req;
     
     
    
@@ -90,17 +91,15 @@ public class OpenWeatherWebApi {
      * @param lon
      * @return
      */
-    public WeatherInfoDto weatherAt(double lat, double lon) {
+    public CompletableFuture<WeatherInfoDto> weatherAt(double lat, double lon) {
         var path =  String.format(WEATHER_AT_TEMPLATE, lat, lon);
       
-        try (Reader reader = req.get(path)) {
-            WeatherInfoDto winfo =
-                    gson.fromJson(reader, WeatherInfoDto.class);
-            return winfo;
-        }
-        catch(IOException e) {
-            throw new UncheckedIOException(e);
-        }
+      return req.getAsync(path)
+           .thenApply(reader -> {
+               WeatherInfoDto winfo =
+                   gson.fromJson(reader, WeatherInfoDto.class);
+               return winfo;
+           });
     }
     
     /**
@@ -112,7 +111,7 @@ public class OpenWeatherWebApi {
     public PollutionInfoDto airPollutionAt(double lat, double lon) {
         var path = String.format(AIR_POLLUTION_AT_TEMPLATE, lat, lon);
  
-        try(Reader reader = req.get(path)) {
+        try(Reader reader = req.getAsync(path)) {
             PollutionInfoQueryDto pi =
                 gson.fromJson(reader, PollutionInfoQueryDto.class);
             if (pi.list == null || pi.list.length != 1)
@@ -134,7 +133,7 @@ public class OpenWeatherWebApi {
     public List<WeatherInfoForecastDto> forecastWeatherAt(double lat, double lon) {
         var path =  String.format(FORECAST_WEATHER_TEMPLATE, lat, lon);
     
-        try (Reader reader = req.get(path)) {
+        try (Reader reader = req.getAsync(path)) {
             ForecastInfoDto finfo =
                     gson.fromJson(reader, ForecastInfoDto.class);
             var local = finfo.getLocal();
@@ -155,7 +154,7 @@ public class OpenWeatherWebApi {
        
         var path =  String.format(LOCATION_SEARCH_TEMPLATE, location);
        
-        try (Reader reader = req.get(path)) {
+        try (Reader reader = req.getAsync(path)) {
             LocationDto[] search = gson.fromJson(reader, LocationDto[].class);
             return Arrays.asList(search);
         }
@@ -171,7 +170,7 @@ public class OpenWeatherWebApi {
                             lati, longi,
                             TimeUtils.toUnixTime(start), TimeUtils.toUnixTime(end));
         
-        try (Reader reader = req.get(path)) {
+        try (Reader reader = req.getAsync(path)) {
             PollutionInfoQueryDto winfo =
                     gson.fromJson(reader, PollutionInfoQueryDto.class);
             return Arrays.asList(winfo.list);
@@ -181,12 +180,12 @@ public class OpenWeatherWebApi {
         }
     }
 
-    public OpenWeatherWebApi(Request req) {
+    public OpenWeatherWebApi(AsyncRequest req) {
         this.req = req;
         gson = new Gson();
     }
 
     public OpenWeatherWebApi() {
-        this(new HttpRequest());
+        this(new HttpAsyncRequest());
     }
 }

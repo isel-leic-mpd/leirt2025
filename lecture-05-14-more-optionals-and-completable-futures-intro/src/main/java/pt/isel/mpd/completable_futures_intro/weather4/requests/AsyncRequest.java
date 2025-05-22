@@ -3,5 +3,5 @@ import java.io.Reader;
 import java.util.concurrent.CompletableFuture;
 
 public interface AsyncRequest {
-    CompletableFuture<Reader>  get(String path);
+    CompletableFuture<Reader> getAsync(String path);
 }

@@ -13,6 +13,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 
 import static pt.isel.mpd.completable_futures_intro.nio2.NioUtils.*;
+import static pt.isel.mpd.completable_futures_intro.utils.ThreadUtils.sleep;
 
 
 public class NioUtilsTests {
@@ -24,20 +25,11 @@ public class NioUtilsTests {
     
     private static Logger logger = LoggerFactory.getLogger(NioUtilsTests.class);
     
-    private void sleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        }
-        catch(Exception e) {
-        
-        }
-    }
+   
     private CompletableFuture<String>
-    getWeatherForLocal(double lat, double lon, AsynchronousChannelGroup group)  throws IOException{
-        var channel = group != null ? AsynchronousSocketChannel.open(group) :
-                          AsynchronousSocketChannel.open();
-        var address = new InetSocketAddress(
-            OpenWeatherWebApi.WEATHER_HOST, 80);
+    getWeatherForLocal(double lat, double lon)  throws IOException{
+        var channel = AsynchronousSocketChannel.open();
+        var address = new InetSocketAddress(OpenWeatherWebApi.WEATHER_HOST, 80);
         var reqString =
             String.format("GET %s HTTP/1.1\r\nConnection:close\r\nHost:%s\r\n\r\n",
                 String.format(OpenWeatherWebApi.WEATHER_AT_TEMPLATE, lat, lon),
@@ -51,23 +43,14 @@ public class NioUtilsTests {
             .thenCompose( __ -> {
                 logger.info("send done, now receive the response");
                 return read(channel);
-            })
-            .handle((s, e) -> {
-                if (e != null) {
-                    logger.info("error " + e);
-                    return null;
-                }
-                else {
-                    logger.info("receive succeeded");
-                    return s;
-                }
             });
+          
     }
     
     @Test
     public void invokeOpenWeatherAPIUsingNio2() throws IOException {
        
-        getWeatherForLocal(LISBON_LAT, LISBON_LONG, null)
+        getWeatherForLocal(LISBON_LAT, LISBON_LONG)
             .thenAccept(response-> {
                 logger.info("response received, show it!");
                 System.out.println(response);
@@ -78,17 +61,15 @@ public class NioUtilsTests {
     
     @Test
     public void getWeatherInParallelUsingNio2() throws IOException {
-        AsynchronousChannelGroup group =
-            AsynchronousChannelGroup.withThreadPool(Executors.newSingleThreadExecutor());
-        
-        var fl = getWeatherForLocal(LISBON_LAT, LISBON_LONG, group)
+        logger.info("start requests");
+        var fl = getWeatherForLocal(LISBON_LAT, LISBON_LONG)
             .thenAcceptAsync(response-> {
                 sleep(2000);
                 logger.info("response received, show it!");
                 System.out.println(response);
             });
        
-        var fp = getWeatherForLocal(PORTO_LAT, PORTO_LONG, group)
+        var fp = getWeatherForLocal(PORTO_LAT, PORTO_LONG)
                      .thenAcceptAsync(response-> {
                          sleep(2000);
                          logger.info("response received, show it!");
@@ -97,6 +78,6 @@ public class NioUtilsTests {
         
         fl.join();
         fp.join();
-        
+        logger.info("end test");
     }
 }

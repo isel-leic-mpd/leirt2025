@@ -11,7 +11,7 @@ import java.util.concurrent.CompletableFuture;
 public class HttpAsyncRequest implements AsyncRequest {
 
     @Override
-    public CompletableFuture<Reader> get(String path)  {
+    public CompletableFuture<Reader> getAsync(String path)  {
         var client = HttpClient.newHttpClient();
         var request = HttpRequest.newBuilder()
             .uri(URI.create(path))
