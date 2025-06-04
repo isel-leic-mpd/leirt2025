@@ -13,7 +13,7 @@ public class SequenceTests {
         var values = List.of(3, 7, 8, 2, 9, 1);
         
         var seq = from(values)
-                                   .filter(t -> t%2 == 1);
+                                   .filter(t -> t % 2 == 1);
         var expected = List.of(3, 7, 9, 1);
         assertEquals(expected, seq.toList());
     }
